@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user.model';
+import { User } from '../models/user.model.js';
 
 export const userAuth = async (req, res, next) => {
     try {
+        console.log("inside user auth")
         const cookie = req.cookies;
         const { token } = cookie;
 
@@ -12,9 +13,10 @@ export const userAuth = async (req, res, next) => {
         const { _id } = isTokenValid;
         const loggedInUser = await User.findById(_id);
 
+
         if (!loggedInUser) throw new Error("User does not exists!");
 
-        res.user = loggedInUser;
+        req.user = loggedInUser; 
 
         next();
 
